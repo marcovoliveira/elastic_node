@@ -47,6 +47,9 @@ app.get("/", function(req, res) {
   });
 });
 
+// match_phrase
+// match_phrase_prefix
+
 app.get("/search", function(req, res) {
   let param = {
     from: 0,

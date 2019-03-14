@@ -1,53 +1,37 @@
-const elasticsearch = require("elasticsearch");
-
+const elasticsearch = require('elasticsearch');
 const client = new elasticsearch.Client({
-  hosts: ["http://localhost:9200"]
+    hosts: ['http://localhost:9200']
 });
 
-client.ping(
-  {
-    requestTimeout: 30000
-  },
-  function(error) {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log("200");
-    }
-  }
-);
+// GET localhost:9200
+client
+    .ping({ requestTimeout: 3000 })
+    .then(response => console.log(response, 'All is well'))
+    .catch(error => console.log(error, 'elasticsearch cluster is down!'));
 
-client.indices.create(
-  {
-    index: "movies"
-  },
-  function(error, response, status) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("200", response);
-    }
-  }
-);
+// PUT localhost:9200/movies
+client.indices
+    .create({ index: 'movies' })
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
 
-const movies = require("./movies.json");
-
-var bulk = [];
+const movies = require('./movies.json');
+let bulk = [];
 
 movies.forEach(movie => {
-  bulk.push({
-    index: {
-      _index: "movies",
-      _type: "all_movies"
-    }
-  });
-  bulk.push(movie);
+    bulk.push({
+        index: {
+            _index: 'movies',
+            _type: '_doc'
+        }
+    });
+    bulk.push(movie);
 });
 
-client.bulk({ body: bulk }, function(error, response) {
-  if (error) {
-    console.log("400", error);
-  } else {
-    console.log("200", movies.length);
-  }
-});
+// POST localhost:9200/_bulk
+client
+    .bulk({ body: bulk })
+    .then(response =>
+        console.log(response, 'Inseridos: ' + movies.length + ' filmes')
+    )
+    .catch(error => console.log(error));

@@ -1,2 +1,4 @@
 elasticsearch-6.6.1
 node_modules
+.eslintrc.js
+TODO.txt

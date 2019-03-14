@@ -12,5 +12,9 @@
     "body-parser": "^1.18.3",
     "elasticsearch": "^15.4.1",
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-google": "^0.12.0"
   }
 }
